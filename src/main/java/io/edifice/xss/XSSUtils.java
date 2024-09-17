@@ -110,20 +110,7 @@
          }
          return res.toString();
      }
- 
-    //  public static MultiMap safeMultiMap(MultiMap m) {
-    //      for (String name : m.names()) {
-    //          List<String> values = m.getAll(name);
-    //          List<String> safeValues = new ArrayList<>();
-    //          if (values == null) continue;
-    //          for (String value: values) {
-    //              safeValues.add(stripXSS(value));
-    //          }
-    //          m.set(name, safeValues);
-    //      }
-    //      return m;
-    //  }
- 
+
      private static final Pattern unicodePattern = Pattern.compile("\\\\u([0-9A-Fa-f]{4})");
  
      private static String unescapeUnicode(String value) {
