@@ -75,6 +75,7 @@
              Pattern.compile("atob\\((.*?)\\)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
              Pattern.compile("javascript:", Pattern.CASE_INSENSITIVE),
              Pattern.compile("vbscript:", Pattern.CASE_INSENSITIVE),
+             Pattern.compile("\\[\\[.*?\\]\\]", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
              Pattern.compile("on(click|context|mouse|dblclick|key|abort|error|before|hash|load|page|" +
                      "resize|scroll|unload|blur|change|focus|input|invalid|reset|search|select|submit|drag|drop|copy|cut|paste|" +
                      "after|before|can|end|duration|emptied|play|progress|seek|stall|suspend|time|volume|waiting|message|open|touch|" +
@@ -103,7 +104,13 @@
              Pattern pattern = patterns[i];
              final Matcher matcher = pattern.matcher(strWithoutWhitespace.toString());
              if (matcher.find()) {
-                 res.replace(positions.get(matcher.start()), positions.get(matcher.end()), replace);
+                int endPosition = matcher.end();
+                if (endPosition >= positions.size()) {
+                    final Integer tmpIntVal = positions.get(positions.size() -1);
+                    positions.add(tmpIntVal+1);
+                    endPosition = positions.size() - 1;
+                }
+                 res.replace(positions.get(matcher.start()), positions.get(endPosition), replace);
                  return replaceIgnoreWhitespace(patterns, res.toString(), replace);
                  // We must call te method again because positions have changed following replace
              }
