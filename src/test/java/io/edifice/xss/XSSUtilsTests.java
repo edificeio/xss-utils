@@ -1,12 +1,24 @@
 package io.edifice.xss;
 
-
 import static org.junit.Assert.assertEquals;
 import static org.owasp.html.AntiSamyTest.assertSanitizedDoesNotContain;
 
 import org.junit.Test;
 
 public class XSSUtilsTests {
+
+    @Test
+    public void iw263Test() {
+        final String content =
+                "<script>\n" + //
+                "setTimeout(() => {\n" + //
+                "window.open(\"https://www.my_virus_exemple.com\",\"_blank\"); //pour telecharger le virus ou alert(1);\n" + //
+                "},3000); /// il faut attendre 3s car je veux engresistrer cette frises\n" + //
+                "</script>";
+        final String resContent = XSSUtils.stripXSS(content);
+        System.out.println(resContent);
+        assertEquals("", resContent);
+    }
 
     @Test
     public void iw270Test() {
@@ -53,6 +65,123 @@ public class XSSUtilsTests {
         final String resPayload = XSSUtils.stripXSS(payload);
         System.out.println(resPayload);
         assertSanitizedDoesNotContain(resPayload, content);
+
+        final String safePayload1 = "{\n" + //
+                        "  \"school\": {\n" + //
+                        "    \"name\": \"Sunrise High School\",\n" + //
+                        "    \"location\": \"Downtown City\",\n" + //
+                        "    \"students\": [\n" + //
+                        "      {\n" + //
+                        "        \"id\": 1,\n" + //
+                        "        \"name\": \"Alice\",\n" + //
+                        "        \"age\": 15,\n" + //
+                        "        \"grades\": {\n" + //
+                        "          \"math\": 95,\n" + //
+                        "          \"science\": 89,\n" + //
+                        "          \"history\": 92\n" + //
+                        "        },\n" + //
+                        "        \"activities\": [\"basketball\", \"chess club\"]\n" + //
+                        "      },\n" + //
+                        "      {\n" + //
+                        "        \"id\": 2,\n" + //
+                        "        \"name\": \"Bob\",\n" + //
+                        "        \"age\": 16,\n" + //
+                        "        \"grades\": {\n" + //
+                        "          \"math\": 78,\n" + //
+                        "          \"science\": 85,\n" + //
+                        "          \"history\": 80\n" + //
+                        "        },\n" + //
+                        "        \"activities\": [\"soccer\", \"band\"]\n" + //
+                        "      }\n" + //
+                        "    ],\n" + //
+                        "    \"teachers\": [\n" + //
+                        "      {\n" + //
+                        "        \"id\": 101,\n" + //
+                        "        \"name\": \"Mr. Smith\",\n" + //
+                        "        \"subject\": \"Math\",\n" + //
+                        "        \"classes\": [\"Algebra\", \"Calculus\"]\n" + //
+                        "      },\n" + //
+                        "      {\n" + //
+                        "        \"id\": 102,\n" + //
+                        "        \"name\": \"Ms. Johnson\",\n" + //
+                        "        \"subject\": \"Science\",\n" + //
+                        "        \"classes\": [\"Biology\", \"Physics\"]\n" + //
+                        "      }\n" + //
+                        "    ]\n" + //
+                        "  }\n" + //
+                        "}\n" + //
+                        "";
+        final String resSafePayload1 = XSSUtils.stripXSS(safePayload1);
+        assertEquals(safePayload1, resSafePayload1);
+
+        final String safePayload2 = "{\n" + //
+                        "  \"company\": {\n" + //
+                        "    \"name\": \"Tech Innovators Inc.\",\n" + //
+                        "    \"departments\": [\n" + //
+                        "      {\n" + //
+                        "        \"name\": \"Engineering\",\n" + //
+                        "        \"teams\": [\n" + //
+                        "          [\n" + //
+                        "            {\n" + //
+                        "              \"teamName\": \"Backend Team\",\n" + //
+                        "              \"members\": [\n" + //
+                        "                { \"name\": \"Alice\", \"role\": \"Lead Developer\" },\n" + //
+                        "                { \"name\": \"Bob\", \"role\": \"Software Engineer\" }\n" + //
+                        "              ]\n" + //
+                        "            },\n" + //
+                        "            {\n" + //
+                        "              \"teamName\": \"Frontend Team\",\n" + //
+                        "              \"members\": [\n" + //
+                        "                { \"name\": \"Charlie\", \"role\": \"UI/UX Designer\" },\n" + //
+                        "                { \"name\": \"Dave\", \"role\": \"Frontend Developer\" }\n" + //
+                        "              ]\n" + //
+                        "            }\n" + //
+                        "          ],\n" + //
+                        "          [\n" + //
+                        "            {\n" + //
+                        "              \"teamName\": \"DevOps Team\",\n" + //
+                        "              \"members\": [\n" + //
+                        "                { \"name\": \"Eve\", \"role\": \"DevOps Engineer\" },\n" + //
+                        "                { \"name\": \"Frank\", \"role\": \"Cloud Specialist\" }\n" + //
+                        "              ]\n" + //
+                        "            },\n" + //
+                        "            {\n" + //
+                        "              \"teamName\": \"QA Team\",\n" + //
+                        "              \"members\": [\n" + //
+                        "                { \"name\": \"Grace\", \"role\": \"QA Analyst\" },\n" + //
+                        "                { \"name\": \"Heidi\", \"role\": \"Automation Tester\" }\n" + //
+                        "              ]\n" + //
+                        "            }\n" + //
+                        "          ]\n" + //
+                        "        ]\n" + //
+                        "      },\n" + //
+                        "      {\n" + //
+                        "        \"name\": \"Marketing\",\n" + //
+                        "        \"teams\": [\n" + //
+                        "          [\n" + //
+                        "            {\n" + //
+                        "              \"teamName\": \"Content Team\",\n" + //
+                        "              \"members\": [\n" + //
+                        "                { \"name\": \"Ivy\", \"role\": \"Content Writer\" },\n" + //
+                        "                { \"name\": \"Jack\", \"role\": \"SEO Specialist\" }\n" + //
+                        "              ]\n" + //
+                        "            },\n" + //
+                        "            {\n" + //
+                        "              \"teamName\": \"Social Media Team\",\n" + //
+                        "              \"members\": [\n" + //
+                        "                { \"name\": \"Kate\", \"role\": \"Social Media Manager\" },\n" + //
+                        "                { \"name\": \"Leo\", \"role\": \"Community Manager\" }\n" + //
+                        "              ]\n" + //
+                        "            }\n" + //
+                        "          ]\n" + //
+                        "        ]\n" + //
+                        "      }\n" + //
+                        "    ]\n" + //
+                        "  }\n" + //
+                        "}\n" + //
+                        "";
+        final String resSafePayload2 = XSSUtils.stripXSS(safePayload2);
+        assertEquals(safePayload2, resSafePayload2);
     }
 
 }
