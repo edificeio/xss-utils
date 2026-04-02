@@ -63,6 +63,12 @@
  
      private XSSUtils() {}
  
+    /*
+    ** Added a fix following the issue https://edifice-community.atlassian.net/browse/IW-384
+    ** 
+    ** A possible solution would be to capture all "on" events
+    ** Pattern.compile("on\\w+(\\s*)=", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
+    */
      private static final Pattern[] patterns = new Pattern[]{
              Pattern.compile("<script>(.*?)</script>", Pattern.CASE_INSENSITIVE),
  //			Pattern.compile("src[\r\n]*=[\r\n]*\\\'(.*?)\\\'", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
@@ -79,7 +85,7 @@
              Pattern.compile("on(click|context|mouse|dblclick|key|abort|error|before|hash|load|page|" +
                      "resize|scroll|unload|blur|change|focus|input|invalid|reset|search|select|submit|drag|drop|copy|cut|paste|" +
                      "after|before|can|end|duration|emptied|play|progress|seek|stall|suspend|time|volume|waiting|message|open|touch|" +
-                     "online|offline|popstate|show|storage|toggle|wheel|animation\\w+|begin)(\\s*\\w*\\s*)=",
+                     "online|offline|popstate|show|storage|toggle|wheel|pointer|animation\\w+|begin)(\\s*\\w*\\s*)=",
                      Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
      };
  
